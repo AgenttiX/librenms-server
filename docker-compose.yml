@@ -18,6 +18,8 @@ services:
       - "MYSQL_DATABASE=${MYSQL_DATABASE}"
       - "MYSQL_USER=${MYSQL_USER}"
       - "MYSQL_PASSWORD=${MYSQL_PASSWORD}"
+    labels:
+      - "com.centurylinklabs.watchtower.scope=librenms"
     restart: always
 
   memcached:
@@ -25,6 +27,8 @@ services:
     container_name: librenms_memcached
     environment:
       - "TZ=${TZ}"
+    labels:
+      - "com.centurylinklabs.watchtower.scope=librenms"
     restart: always
 
   redis:
@@ -32,6 +36,8 @@ services:
     container_name: librenms_redis
     environment:
       - "TZ=${TZ}"
+    labels:
+      - "com.centurylinklabs.watchtower.scope=librenms"
     restart: always
 
   rrdcached:
@@ -49,6 +55,8 @@ services:
       - "WRITE_JITTER=1800"
       - "WRITE_THREADS=4"
       - "FLUSH_DEAD_DATA_INTERVAL=3600"
+    labels:
+      - "com.centurylinklabs.watchtower.scope=librenms"
     restart: always
 
   msmtpd:
@@ -56,6 +64,8 @@ services:
     container_name: librenms_msmtpd
     env_file:
       - "./msmtpd.env"
+    labels:
+      - "com.centurylinklabs.watchtower.scope=librenms"
     restart: always
 
   librenms:
@@ -85,6 +95,8 @@ services:
       - "DB_USER=${MYSQL_USER}"
       - "DB_PASSWORD=${MYSQL_PASSWORD}"
       - "DB_TIMEOUT=60"
+    labels:
+      - "com.centurylinklabs.watchtower.scope=librenms"
     restart: always
 
   dispatcher:
@@ -112,6 +124,8 @@ services:
       - "REDIS_PORT=6379"
       - "REDIS_DB=0"
       - "SIDECAR_DISPATCHER=1"
+    labels:
+      - "com.centurylinklabs.watchtower.scope=librenms"
     restart: always
 
   syslog-ng:
@@ -142,20 +156,34 @@ services:
       - "DB_PASSWORD=${MYSQL_PASSWORD}"
       - "DB_TIMEOUT=60"
       - "SIDECAR_SYSLOGNG=1"
+    labels:
+      - "com.centurylinklabs.watchtower.scope=librenms"
     restart: always
 
-  ouroboros:
-    container_name: ouroboros
-    hostname: ouroboros
-    image: pyouroboros/ouroboros
-    environment:
-      - CLEANUP=true
-      - INTERVAL=3600
-      - LOG_LEVEL=info
-      - SELF_UPDATE=true
-      # This would update other containers on the same server as well
-      - IGNORE=mongo influxdb postgres mariadb factoriotools/factorio factorio
-      - TZ=Europe/Helsinki
-    restart: unless-stopped
+  watchtower:
+    container_name: librenms_watchtower
+    image: containrrr/watchtower:latest
     volumes:
+      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock
+    # Run once a week on Sunday at 05:00
+    command: --cleanup --schedule "0 0 5 * * 0" --scope librenms
+    labels:
+      - "com.centurylinklabs.watchtower.scope=librenms"
+    restart: unless-stopped
+
+#   ouroboros:
+#     container_name: ouroboros
+#     hostname: ouroboros
+#     image: pyouroboros/ouroboros
+#     environment:
+#       - CLEANUP=true
+#       - INTERVAL=3600
+#       - LOG_LEVEL=info
+#       - SELF_UPDATE=true
+#       # This would update other containers on the same server as well
+#       - IGNORE=mongo influxdb postgres mariadb factoriotools/factorio factorio
+#       - TZ=Europe/Helsinki
+#     restart: unless-stopped
+#     volumes:
+#       - /var/run/docker.sock:/var/run/docker.sock
