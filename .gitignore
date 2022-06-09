@@ -1,3 +1,4 @@
+.env
 db
 librenms
 rrd-journal
