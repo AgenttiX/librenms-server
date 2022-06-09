@@ -1,5 +1,8 @@
 version: "3.5"
 
+# Based on
+# https://github.com/librenms/docker/blob/master/examples/compose/docker-compose.yml
+
 services:
   db:
     image: mariadb:latest
