@@ -76,6 +76,9 @@ services:
     container_name: librenms
     # domainname: your-domain-name.local
     hostname: librenms
+    # cap_add:
+    #   - NET_ADMIN
+    #   - NET_RAW
     ports:
       - target: 8000
         published: 80
@@ -107,6 +110,9 @@ services:
     container_name: librenms_dispatcher
     # domainname: your-domain-name.local
     hostname: librenms
+    # cap_add:
+    #   - NET_ADMIN
+    #   - NET_RAW
     depends_on:
       - librenms
       - redis
