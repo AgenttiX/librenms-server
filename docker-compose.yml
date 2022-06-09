@@ -74,7 +74,7 @@ services:
   librenms:
     image: librenms/librenms:latest
     container_name: librenms
-    domainname: home.agx.fi
+    # domainname: your-domain-name.local
     hostname: librenms
     ports:
       - target: 8000
@@ -105,7 +105,7 @@ services:
   dispatcher:
     image: librenms/librenms:latest
     container_name: librenms_dispatcher
-    domainname: home.agx.fi
+    # domainname: your-domain-name.local
     hostname: librenms
     depends_on:
       - librenms
@@ -134,8 +134,8 @@ services:
   syslog-ng:
     image: librenms/librenms:latest
     container_name: librenms_syslog
-    domainname: home.agx.fi
     hostname: librenms
+    # domainname: your-domain-name.local
     depends_on:
       - librenms
     ports:
