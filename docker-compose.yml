@@ -101,6 +101,9 @@ services:
       - "DB_USER=${MYSQL_USER}"
       - "DB_PASSWORD=${MYSQL_PASSWORD}"
       - "DB_TIMEOUT=60"
+      - "REDIS_HOST=redis"
+      - "REDIS_PORT=6379"
+      - "REDIS_DB=0"
     labels:
       - "com.centurylinklabs.watchtower.scope=librenms"
     restart: always
@@ -165,6 +168,9 @@ services:
       - "DB_USER=${MYSQL_USER}"
       - "DB_PASSWORD=${MYSQL_PASSWORD}"
       - "DB_TIMEOUT=60"
+      - "REDIS_HOST=redis"
+      - "REDIS_PORT=6379"
+      - "REDIS_DB=0"
       - "SIDECAR_SYSLOGNG=1"
     labels:
       - "com.centurylinklabs.watchtower.scope=librenms"
