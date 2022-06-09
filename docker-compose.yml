@@ -109,7 +109,7 @@ services:
     image: librenms/librenms:latest
     container_name: librenms_dispatcher
     # domainname: your-domain-name.local
-    hostname: librenms
+    hostname: librenms-dispatcher
     # cap_add:
     #   - NET_ADMIN
     #   - NET_RAW
@@ -139,9 +139,9 @@ services:
 
   syslog-ng:
     image: librenms/librenms:latest
-    container_name: librenms_syslog
-    hostname: librenms
+    container_name: librenms_syslogng
     # domainname: your-domain-name.local
+    hostname: librenms-syslogng
     depends_on:
       - librenms
     ports:
